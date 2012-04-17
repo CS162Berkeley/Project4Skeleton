@@ -33,6 +33,7 @@ package edu.berkeley.cs162;
 import java.io.Serializable;
 import java.util.Dictionary;
 import java.util.Hashtable;
+
 /**
  * This is a dummy KeyValue Store. Ideally this would go to disk, 
  * or some other backing store. For this project, we simulate the disk like 
@@ -52,19 +53,18 @@ public class KVStore<K extends Serializable, V extends Serializable> implements 
 	@Override
 	public boolean put(K key, V value) throws KVException {
 		putDelay();
+		V existingValue = get(key);
 		store.put(key, value);
-		return false;
+		if (existingValue == null) {
+			return false;
+		}
+		return true;
 	}
+
 	@Override
 	public V get(K key) throws KVException {
 		getDelay();
 		return this.store.get(key);
-	}
-	@Override
-	public void del(K key) throws KVException {
-		delDelay();
-		if(key!=null)
-			this.store.remove(key);
 	}
 	
 	private void delay() {
@@ -82,8 +82,14 @@ public class KVStore<K extends Serializable, V extends Serializable> implements 
 	private void putDelay() {
 		delay();
 	}
-	
+
 	private void delDelay() {
 		delay();
+	}
+	
+	@Override
+	public void del(K key) throws KVException {
+		delDelay();
+		this.store.remove(key);
 	}
 }
