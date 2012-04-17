@@ -44,6 +44,11 @@ public class TPCMaster<K extends Serializable, V extends Serializable>  {
 		private KVClient<K, V> kvClient = null;
 		private Socket kvSocket = null;
 
+		/**
+		 * 
+		 * @param slaveInfo as "SlaveServerID@HostName:Port"
+		 * @throws KVException
+		 */
 		public SlaveInfo(String slaveInfo) throws KVException {
 			// implement me
 		}

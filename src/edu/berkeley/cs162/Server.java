@@ -33,7 +33,6 @@ package edu.berkeley.cs162;
 import java.net.InetAddress;
 
 public class Server {
-	static KeyServer<String, String> key_server = null;
 	static SocketServer server = null;
 	
 	static TPCMaster<String, String> tpcMaster = null;
@@ -50,9 +49,8 @@ public class Server {
 		
 		// Create KVClientHandler
 		System.out.println("Binding Master:");
-		key_server = new KeyServer<String, String>(1000);
 		server = new SocketServer(InetAddress.getLocalHost().getHostAddress(), 8080);
-		NetworkHandler handler = new KVClientHandler<String, String>(key_server, tpcMaster);
+		NetworkHandler handler = new KVClientHandler<String, String>(null, tpcMaster);
 		server.addHandler(handler);
 		server.connect();
 		System.out.println("Starting Master");
