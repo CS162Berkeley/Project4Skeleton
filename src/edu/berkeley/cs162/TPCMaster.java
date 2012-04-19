@@ -37,6 +37,25 @@ import java.util.TreeSet;
 
 public class TPCMaster<K extends Serializable, V extends Serializable>  {
 	
+	private class TPCRegistrationHandler implements NetworkHandler {
+
+		private ThreadPool threadpool = null;
+
+		public TPCRegistrationHandler() {
+			// Call the other constructor
+			this(1);	
+		}
+
+		public TPCRegistrationHandler(int connections) {
+			threadpool = new ThreadPool(connections);	
+		}
+
+		@Override
+		public void handle(Socket client) throws IOException {
+			// implement me
+		}
+	}
+	
 	private class SlaveInfo {
 		private int slaveID = -1;
 		private String hostName = null;
@@ -74,6 +93,7 @@ public class TPCMaster<K extends Serializable, V extends Serializable>  {
 	
 	private KVCache<K, V> masterCache = new KVCache<K, V>(1000);
 	
+	// Registration server that uses TPCRegistrationHandler
 	private SocketServer regServer = null;
 	
 	private Long tpcOpId = 0L;
