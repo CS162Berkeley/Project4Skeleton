@@ -31,6 +31,7 @@ package edu.berkeley.cs162;
 
 import java.net.InetAddress;
 import java.net.Socket;
+import java.util.UUID;
 
 public class SlaveServer {
 	static String logPath = null;
@@ -39,7 +40,7 @@ public class SlaveServer {
 	static KeyServer<String, String> keyServer = null;
 	static SocketServer server = null;
 	
-	static String slaveID = null;
+	static UUID slaveID = null;
 	static String masterHostName = null;
 	static int masterPort = -1;
 	static int registrationPort = -1;
@@ -54,7 +55,7 @@ public class SlaveServer {
 		}
 		
 		// Read Master info from command line
-		slaveID = args[0];
+		slaveID = UUID.fromString(args[0]);
 		masterHostName = args[1];
 		masterPort = Integer.parseInt(args[2]);
 		
