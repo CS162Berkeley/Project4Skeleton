@@ -34,6 +34,7 @@ import java.io.Serializable;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.util.TreeSet;
+import java.util.UUID;
 
 public class TPCMaster<K extends Serializable, V extends Serializable>  {
 	
@@ -57,7 +58,7 @@ public class TPCMaster<K extends Serializable, V extends Serializable>  {
 	}
 	
 	private class SlaveInfo {
-		private int slaveID = -1;
+		private UUID slaveID = null;
 		private String hostName = null;
 		private int port = -1;
 		private KVClient<K, V> kvClient = null;
@@ -72,7 +73,7 @@ public class TPCMaster<K extends Serializable, V extends Serializable>  {
 			// implement me
 		}
 		
-		public int getSlaveID() {
+		public UUID getSlaveID() {
 			return slaveID;
 		}
 
