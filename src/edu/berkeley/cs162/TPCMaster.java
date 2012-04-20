@@ -115,8 +115,6 @@ public class TPCMaster<K extends Serializable, V extends Serializable>  {
 	
 	/**
 	 * Start registration server in a separate thread
-	 * 
-	 * @throws IOException
 	 */
 	public void run() {
 		// implement me
