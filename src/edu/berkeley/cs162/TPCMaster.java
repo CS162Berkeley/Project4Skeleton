@@ -100,11 +100,15 @@ public class TPCMaster<K extends Serializable, V extends Serializable>  {
 	private Long tpcOpId = 0L;
 	
 	/**
-	 * Creates TPCMaster where SlaveServers actually register
+	 * Creates TPCMaster using SlaveInfo provided as arguments and SlaveServers 
+	 * actually register to let TPCMaster know their presence
 	 * 
+	 * @param listOfSlaves
 	 * @throws Exception
 	 */
-	public TPCMaster() throws Exception {
+	public TPCMaster(String[] listOfSlaves) throws Exception {
+		// implement me
+
 		// Create registration server
 		regServer = new SocketServer(InetAddress.getLocalHost().getHostAddress(), 9090);
 	}

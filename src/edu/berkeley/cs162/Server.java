@@ -38,13 +38,13 @@ public class Server {
 	static TPCMaster<String, String> tpcMaster = null;
 	
 	/**
-	 * @param args 
+	 * @param args list of SlaveServers in "SlaveServerID@HostName:Port" format
 	 * @throws IOException 
 	 */
 	public static void main(String[] args) throws Exception {		
 		
 		// Create TPCMaster
-		tpcMaster = new TPCMaster<String, String>();
+		tpcMaster = new TPCMaster<String, String>(args);
 		tpcMaster.run();
 		
 		// Create KVClientHandler
