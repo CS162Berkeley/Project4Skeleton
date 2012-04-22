@@ -68,6 +68,7 @@ public class SlaveServer {
 		server.addHandler(handler);
 		server.connect();
 		System.out.println("Starting SlaveServer at " + server.getHostname() + ":" + server.getPort());
+		// fix me not to block
 		server.run();
 		
 		// Create TPCLog
