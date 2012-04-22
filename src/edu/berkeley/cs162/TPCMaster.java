@@ -143,12 +143,13 @@ public class TPCMaster<K extends Serializable, V extends Serializable>  {
 	
 	/**
 	 * Synchronized method to perform TPC operations one after another. 
-	 *  
+	 * 
 	 * @param msg
 	 * @param isPutReq
 	 * @return True if the TPC operation has succeeded
+	 * @throws KVException
 	 */
-	public synchronized boolean performTPCOperation(KVMessage msg, boolean isPutReq) {
+	public synchronized boolean performTPCOperation(KVMessage msg, boolean isPutReq) throws KVException {
 		// implement me
 		return false;
 	}
