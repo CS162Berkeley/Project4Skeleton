@@ -49,8 +49,8 @@ public class SlaveServer {
 	 * @param args
 	 */
 	public static void main(String[] args) throws Exception {
-		if (args.length < 3) {
-			System.err.println("USAGE: SlaveServer <slaveID> <masterHostName> <masterPort> [masterListenPort]");
+		if (args.length != 4) {
+			System.err.println("USAGE: SlaveServer <slaveID> <masterHostName> <masterPort> <registrationPort>");
 			System.exit(1);
 		}
 		
@@ -58,10 +58,7 @@ public class SlaveServer {
 		slaveID = UUID.fromString(args[0]);
 		masterHostName = args[1];
 		masterPort = Integer.parseInt(args[2]);
-		
-		if (args.length == 4) {
-			registrationPort = Integer.parseInt(args[3]);
-		}
+		registrationPort = Integer.parseInt(args[3]);
 		
 		// Create TPCMasterHandler
 		System.out.println("Binding SlaveServer:");
