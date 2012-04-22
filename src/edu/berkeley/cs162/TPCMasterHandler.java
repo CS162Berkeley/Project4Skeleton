@@ -33,6 +33,11 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.net.Socket;
 
+/**
+ * Implements NetworkHandler to handle 2PC operation requests from the Master/
+ * Coordinator Server
+ *
+ */
 public class TPCMasterHandler<K extends Serializable, V extends Serializable> implements NetworkHandler {
 	private KeyServer<K, V> keyserver = null;
 	private ThreadPool threadpool = null;

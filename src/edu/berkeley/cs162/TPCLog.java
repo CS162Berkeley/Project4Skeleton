@@ -61,6 +61,9 @@ public class TPCLog<K extends Serializable, V extends Serializable> {
 		// implement me
 	}
 
+	/**
+	 * Load log from persistent storage
+	 */
 	@SuppressWarnings("unchecked")
 	public void loadFromDisk() {
 		ObjectInputStream inputStream = null;
@@ -86,6 +89,9 @@ public class TPCLog<K extends Serializable, V extends Serializable> {
 		}
 	}
 	
+	/**
+	 * Writes log to persistent storage
+	 */
 	public void flushToDisk() {
 		ObjectOutputStream outputStream = null;
 		
@@ -106,6 +112,10 @@ public class TPCLog<K extends Serializable, V extends Serializable> {
 		}
 	}
 	
+	/**
+	 * Load log and rebuild by iterating over log entries 
+	 * @throws KVException
+	 */
 	public void rebuildKeyServer() throws KVException {
 		// implement me
 	}

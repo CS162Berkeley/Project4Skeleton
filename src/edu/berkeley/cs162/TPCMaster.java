@@ -38,6 +38,11 @@ import java.util.UUID;
 
 public class TPCMaster<K extends Serializable, V extends Serializable>  {
 	
+	/**
+	 * Implements NetworkHandler to handle registration requests from 
+	 * SlaveServers.
+	 * 
+	 */
 	private class TPCRegistrationHandler implements NetworkHandler {
 
 		private ThreadPool threadpool = null;
@@ -57,10 +62,19 @@ public class TPCMaster<K extends Serializable, V extends Serializable>  {
 		}
 	}
 	
+	/**
+	 *  Data structure to maintain information about SlaveServers
+	 *
+	 */
 	private class SlaveInfo {
+		// 128-bit globally unique UUID of the SlaveServer
 		private UUID slaveID = null;
+		// Name of the host this SlaveServer is running on
 		private String hostName = null;
+		// Port which SlaveServer is listening to
 		private int port = -1;
+		
+		// Variables to be used to maintain connection with this SlaveServer
 		private KVClient<K, V> kvClient = null;
 		private Socket kvSocket = null;
 
@@ -90,13 +104,16 @@ public class TPCMaster<K extends Serializable, V extends Serializable>  {
 		}
 	}
 	
+	// Timeout value used during 2PC operations
 	private static final int TIMEOUT_MILLISECONDS = 5000;
 	
+	// Cache stored in the Master/Coordinator Server
 	private KVCache<K, V> masterCache = new KVCache<K, V>(1000);
 	
 	// Registration server that uses TPCRegistrationHandler
 	private SocketServer regServer = null;
 	
+	// ID of the next 2PC operation
 	private Long tpcOpId = 0L;
 	
 	/**
@@ -113,6 +130,12 @@ public class TPCMaster<K extends Serializable, V extends Serializable>  {
 		regServer = new SocketServer(InetAddress.getLocalHost().getHostAddress(), 9090);
 	}
 	
+	/**
+	 * Calculates tpcOpId to be used for an operation. In this implementation
+	 * it is a long variable that increases by one for each 2PC operation. 
+	 * 
+	 * @return 
+	 */
 	private String getNextTpcOpId() {
 		tpcOpId++;
 		return tpcOpId.toString();		
@@ -126,7 +149,7 @@ public class TPCMaster<K extends Serializable, V extends Serializable>  {
 	}
 	
 	/**
-	 * Find first replica location
+	 * Find first/primary replica location
 	 * @param key
 	 * @return
 	 */
@@ -146,7 +169,7 @@ public class TPCMaster<K extends Serializable, V extends Serializable>  {
 	}
 	
 	/**
-	 * Synchronized method to perform TPC operations one after another. 
+	 * Synchronized method to perform 2PC operations one after another
 	 * 
 	 * @param msg
 	 * @param isPutReq
@@ -158,6 +181,18 @@ public class TPCMaster<K extends Serializable, V extends Serializable>  {
 		return false;
 	}
 
+	/**
+	 * Perform GET operation in the following manner:
+	 * - Try to GET from first/primary replica
+	 * - If primary succeeded, return Value
+	 * - If primary failed, try to GET from the other replica
+	 * - If secondary succeeded, return Value
+	 * - If secondary failed, return KVExceptions from both replicas
+	 * 
+	 * @param msg Message containing Key to get
+	 * @return Value corresponding to the Key
+	 * @throws KVException
+	 */
 	public V handleGet(KVMessage msg) throws KVException {
 		// implement me
 		return null;
