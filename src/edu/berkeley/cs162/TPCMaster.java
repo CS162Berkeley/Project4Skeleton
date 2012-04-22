@@ -158,7 +158,7 @@ public class TPCMaster<K extends Serializable, V extends Serializable>  {
 		return false;
 	}
 
-	public V handleGet(KVMessage msg) {
+	public V handleGet(KVMessage msg) throws KVException {
 		// implement me
 		return null;
 	}
