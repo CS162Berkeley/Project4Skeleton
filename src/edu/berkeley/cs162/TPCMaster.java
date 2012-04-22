@@ -103,7 +103,7 @@ public class TPCMaster<K extends Serializable, V extends Serializable>  {
 	 * Creates TPCMaster using SlaveInfo provided as arguments and SlaveServers 
 	 * actually register to let TPCMaster know their presence
 	 * 
-	 * @param listOfSlaves
+	 * @param listOfSlaves list of SlaveServers in "SlaveServerID@HostName:Port" format
 	 * @throws Exception
 	 */
 	public TPCMaster(String[] listOfSlaves) throws Exception {
