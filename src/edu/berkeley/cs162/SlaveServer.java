@@ -40,9 +40,13 @@ public class SlaveServer {
 	static KeyServer<String, String> keyServer = null;
 	static SocketServer server = null;
 	
-	static UUID slaveID = null;
+	// 128-bit globally unique UUID of this SlaveServer
+	static UUID slaveID = null;	
+	// Name of the host Master/Coordinator Server is running on
 	static String masterHostName = null;
+	// Port which Master/Coordinator is listening to client requests
 	static int masterPort = -1;
+	// Port which Master/Coordinator is listening to for SlaveServers to register themselves
 	static int registrationPort = -1;
 	
 	/**
