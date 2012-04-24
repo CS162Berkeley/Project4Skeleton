@@ -46,6 +46,14 @@ public class KVCrypt {
     	// implement me
     }
 
+    public void setKey(SecretKey keyPar) throws Exception {
+    	key = keyPar;
+    }
+
+    public void setCipher() throws Exception {
+    	cipher = Cipher.getInstance(algorithm);
+    }
+
     public byte[] encrypt(String input)
         throws InvalidKeyException, 
                BadPaddingException,
