@@ -148,11 +148,47 @@ public class TPCMaster<K extends Serializable, V extends Serializable>  {
 	}
 	
 	/**
+	 * Converts Strings to 64-bit longs
+	 * Borrowed from http://stackoverflow.com/questions/1660501/what-is-a-good-64bit-hash-function-in-java-for-textual-strings
+	 * Adapted from String.hashCode()
+	 * @param string String to hash to 64-bit
+	 * @return
+	 */
+	private long hashTo64bit(String string) {
+		// Take a large prime
+		long h = 1125899906842597L; 
+		int len = string.length();
+
+		for (int i = 0; i < len; i++) {
+			h = 31*h + string.charAt(i);
+		}
+		return h;
+	}
+	
+	/**
+	 * Compares two longs as if they were unsigned (Java doesn't have unsigned data types except for char)
+	 * Borrowed from http://www.javamex.com/java_equivalents/unsigned_arithmetic.shtml
+	 * @param n1 First long
+	 * @param n2 Second long
+	 * @return is unsigned n1 less than unsigned n2
+	 */
+	private boolean isLessThanUnsigned(long n1, long n2) {
+		return (n1 < n2) ^ ((n1 < 0) != (n2 < 0));
+	}
+	
+	private boolean isLessThanEqualUnsigned(long n1, long n2) {
+		return isLessThanUnsigned(n1, n2) || n1 == n2;
+	}	
+
+	/**
 	 * Find first/primary replica location
 	 * @param key
 	 * @return
 	 */
 	private SlaveInfo findFirstReplica(K key) {
+		// 64-bit hash of the key
+		long hashedKey = hashTo64bit(key.toString());
+
 		// implement me
 		return null;
 	}
