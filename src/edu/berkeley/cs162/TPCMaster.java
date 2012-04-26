@@ -34,7 +34,6 @@ import java.io.Serializable;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.util.TreeSet;
-import java.util.UUID;
 
 public class TPCMaster<K extends Serializable, V extends Serializable>  {
 	
@@ -67,8 +66,8 @@ public class TPCMaster<K extends Serializable, V extends Serializable>  {
 	 *
 	 */
 	private class SlaveInfo {
-		// 128-bit globally unique UUID of the SlaveServer
-		private UUID slaveID = null;
+		// 64-bit globally unique ID of the SlaveServer
+		private long slaveID = -1;
 		// Name of the host this SlaveServer is running on
 		private String hostName = null;
 		// Port which SlaveServer is listening to
@@ -87,7 +86,7 @@ public class TPCMaster<K extends Serializable, V extends Serializable>  {
 			// implement me
 		}
 		
-		public UUID getSlaveID() {
+		public long getSlaveID() {
 			return slaveID;
 		}
 

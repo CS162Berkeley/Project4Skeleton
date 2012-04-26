@@ -25,11 +25,11 @@ purposes.
 ### Skeleton Code:
 
 The project skeleton you **should** build on top of is posted at
-[https://github.com/CS162Berkeley/Project4Skeletion](https://github.com/CS162Berkeley/Project4Skeletion).
+[https://github.com/CS162Berkeley/Project4Skeleton](https://github.com/CS162Berkeley/Project4Skeleton).
 If you have git installed on your system, you can run
-`git clone https://github.com/CS162Berkeley/Project4Skeletion.git`, or
+`git clone https://github.com/CS162Berkeley/Project4Skeleton.git`, or
 else you can download the tarball from
-[here](https://github.com/CS162Berkeley/Project4Skeletion/zipball/master).
+[here](https://github.com/CS162Berkeley/Project4Skeleton/zipball/master).
 Phase 4 builds on top of the Single Server Key-Value Store developed in
 Phase 3; however, several interfaces have been extended to support the
 required functionalities for Phase 4. You can reuse the code developed
@@ -47,12 +47,13 @@ always, let us know in Piazza if anything is unclear.
 -   **Unless otherwise specified below, you will have to satisfy the
     requirements described in [Phase
     3](http://inst.eecs.berkeley.edu/~cs162/sp12/phase3.html).**
--   Each Key will be stored using 2PC to two Key-Value servers, which
-    will be selected using consistent hashing. There will be **at least
-    two** Key-Value servers in the system. See below for further
-    details.
--   Key-value servers will have 128-bit globally unique IDs (use
-    `java.util.UUID`), and they will register with the coordinator with
+-   Each Key will be stored using 2PC to two Key-Value servers; the
+    first of them will be selected using consistent hashing, while the
+    second will be placed in the successor of the first one. There will
+    be **at least two** Key-Value servers in the system. See below for
+    further details.
+-   Key-value servers will have 64-bit globally unique IDs (use unique
+    `long` numbers), and they will register with the coordinator with
     that ID when they start. For simplicity, you can assume that the
     total number of Key-Value servers are fixed, and they always come
     back with the same ID if they crash. Note that this simplification
@@ -112,15 +113,17 @@ always, let us know in Piazza if anything is unclear.
 
 ### Consistent Hashing
 
-As mentioned earlier, Key-Value servers will have unique 128-bit IDs.
-The coordinator will hash the Keys to 128-bit address space. Then each
-Key-Value server will be responsible for storing Keys with hash values
-greater than the ID of its immediate predecessor up to its own ID.
+As mentioned earlier, Key-Value servers will have unique 64-bit IDs. The
+coordinator will hash the Keys to 64-bit address space. Then each
+Key-Value server will store the first copies of Keys with hash values
+greater than the ID of its immediate predecessor up to its own ID. Note
+that, each Key-Value server will also store the Keys whose first copies
+are stored in its predecessor.
 
 ![Consistent Hashing](http://inst.eecs.berkeley.edu/~cs162/sp12/pics/consistent-hashing.png)
 
 **Figure:** Consistent Hashing. Four Key-Value servers and three hashed
-Keys along with where they are placed in the 128-bit address space.
+Keys along with where they are placed in the 64-bit address space.
 
 ### Sequence of Operations During Concurrent GET and PUT (DELETE) Requests
 
@@ -141,12 +144,17 @@ SlaveServers until it is found.
 **Figure:** Sequence diagram of concurrent Read/Write operations in
 Phase 3.
 
-### Your Key-Value server should support the GET/PUT/DELETE interface using the same format as Phase 3 with the following changes:
+### Your Key-Value server should support the GET/PUT/DELETE interface using the same format as Phase 3 with the following change(s):
 
--   **Responses to Clients for 2PC operations:**\
+-   Multiple error messages in case of an abort should be placed in the
+    same Message field of a "resp" message prefixed by
+    "@SlaveServerID=\>" and separated by the newline character ('\\n').
+    Example: \
+    \
      <?xml version="1.0" encoding="UTF-8"?\>\
      <KVMessage type="resp"\>\
-     <Message\>Committed/Aborted</Message\>\
+
+    <Message\>@SlaveServerID1=\>ErrorMessage1\\n@SlaveServerID2=\>ErrorMessage2</Message\>\
      </KVMessage\>
 
 ### Your Coordinator Server should perform Two-Phase Commit using the following extended KVMessage format (2PCMessage piggybacked on KVMessage):
@@ -164,9 +172,15 @@ Phase 3.
      <Key\>key</Key\>\
      <TPCOpId\>2PC Operation ID</TPCOpId\>\
      </KVMessage\>\
--   **2PC Responses:**\
+-   **2PC Ready:**\
      <?xml version="1.0" encoding="UTF-8"?\>\
-     <KVMessage type="ready/abort"\>\
+     <KVMessage type="ready"\>\
+     <TPCOpId\>2PC Operation ID</TPCOpId\>\
+     </KVMessage\>
+-   **2PC Abort:**\
+     <?xml version="1.0" encoding="UTF-8"?\>\
+     <KVMessage type="abort"\>\
+     <Message\>Error Message</Message\>\
      <TPCOpId\>2PC Operation ID</TPCOpId\>\
      </KVMessage\>
 -   **2PC Decisions:**\
@@ -218,4 +232,3 @@ Phase 3.
 -   Logging and Recovery using Logs
 -   Consistent Hashing
 -   Failure Detection using Timeouts
-

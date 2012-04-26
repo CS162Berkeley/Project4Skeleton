@@ -30,8 +30,6 @@
 package edu.berkeley.cs162;
 
 import java.net.InetAddress;
-import java.net.Socket;
-import java.util.UUID;
 
 public class SlaveServer {
 	static String logPath = null;
@@ -40,8 +38,8 @@ public class SlaveServer {
 	static KeyServer<String, String> keyServer = null;
 	static SocketServer server = null;
 	
-	// 128-bit globally unique UUID of this SlaveServer
-	static UUID slaveID = null;	
+	// 64-bit globally unique ID of this SlaveServer
+	static long slaveID = -1;	
 	// Name of the host Master/Coordinator Server is running on
 	static String masterHostName = null;
 	// Port which Master/Coordinator is listening to client requests
@@ -59,7 +57,7 @@ public class SlaveServer {
 		}
 		
 		// Read Master info from command line
-		slaveID = UUID.fromString(args[0]);
+		slaveID = Long.parseLong(args[0]);
 		masterHostName = args[1];
 		masterPort = Integer.parseInt(args[2]);
 		registrationPort = Integer.parseInt(args[3]);
