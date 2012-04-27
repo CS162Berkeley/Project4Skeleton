@@ -74,7 +74,7 @@ public class SlaveServer {
 		server.run();
 		
 		// Create TPCLog
-		logPath = server.getHostname() + ":" + server.getPort();
+		logPath = slaveID + "@" + server.getHostname();
 		tpcLog = new TPCLog<String, String>(logPath, keyServer);
 		
 		// Load from disk and rebuild logs
