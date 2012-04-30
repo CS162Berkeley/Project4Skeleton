@@ -39,10 +39,15 @@ import java.util.ArrayList;
 
 public class TPCLog<K extends Serializable, V extends Serializable> {
 
-	String logPath = null;
-	KeyServer<K, V> keyServer = null;
+	private String logPath = null;
+	private KeyServer<K, V> keyServer = null;
+
+	// Log entries
+	private ArrayList<KVMessage> entries = null;
 	
-	ArrayList<KVMessage> entries = null; 
+	// Keeps track of the interrupted 2PC operation (There can be at most one, 
+	// i.e., when the last 2PC operation before crashing was in READY state)
+	private KVMessage interruptedTpcOperation = null;
 	
 	public TPCLog(String logPath, KeyServer<K, V> keyServer) {
 		this.logPath = logPath;
@@ -119,5 +124,23 @@ public class TPCLog<K extends Serializable, V extends Serializable> {
 	 */
 	public void rebuildKeyServer() throws KVException {
 		// implement me
+	}
+	
+	/**
+	 * 
+	 * @return Interrupted 2PC operation, if any 
+	 */
+	public KVMessage getInterruptedTpcOperation() { 
+		KVMessage logEntry = interruptedTpcOperation; 
+		interruptedTpcOperation = null; 
+		return logEntry; 
+	}
+	
+	/**
+	 * 
+	 * @return True if TPCLog contains an interrupted 2PC operation
+	 */
+	public boolean hasInterruptedTpcOperation() {
+		return interruptedTpcOperation != null;
 	}
 }
